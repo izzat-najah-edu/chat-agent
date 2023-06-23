@@ -55,19 +55,9 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <executable>false</executable>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                        <configuration>
-                            <skip>true</skip>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
-
         </plugins>
     </build>
 
