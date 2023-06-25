@@ -78,7 +78,10 @@ complete blog article with just a few keywords. And this is an example.
 
     ```
   @SpringBootApplication
-  @ComponentScan(basePackages = {"com.izzatalsharif.openai.chatagent"})
+  @ComponentScan(basePackages = {
+      "this.package...",
+      "com.izzatalsharif.openai.chatagent"
+  })
   public class Application {
       public static void main(String[] args) {
           SpringApplication.run(Application.class, args);
