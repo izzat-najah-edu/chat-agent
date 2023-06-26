@@ -1,5 +1,8 @@
 package com.izzatalsharif.openai.chatagent;
 
+import com.izzatalsharif.openai.chatagent.exception.InputFormattingException;
+import com.izzatalsharif.openai.chatagent.exception.OutputParsingException;
+import lombok.extern.java.Log;
 import reactor.core.publisher.Mono;
 
 /**
@@ -49,6 +52,7 @@ import reactor.core.publisher.Mono;
  * @param <I> the type of the input to the AgentService
  * @param <O> the type of the output from the AgentService
  */
+@Log
 public class AgentService<I, O> {
 
     /**
@@ -100,8 +104,10 @@ public class AgentService<I, O> {
      *
      * @param input the input data
      * @return Mono of the parsed output data
+     * @throws InputFormattingException if an error occurs during input data formatting
+     * @throws OutputParsingException   if an error occurs during output data parsing
      */
-    public Mono<O> requestAndParse(I input) {
+    public Mono<O> requestAndParse(I input) throws InputFormattingException, OutputParsingException {
         return request(input)
                 .map(Response::getContent)
                 .map(parser::parseOutput);
@@ -112,11 +118,18 @@ public class AgentService<I, O> {
      *
      * @param input the input data
      * @return the Mono Response from the OpenAI API
+     * @throws InputFormattingException if an error occurs during input data formatting
+     * @throws OutputParsingException   if an error occurs during output data parsing
      */
-    public Mono<Response> request(I input) {
+    public Mono<Response> request(I input) throws InputFormattingException, OutputParsingException {
         var prompt = formatter.formatInput(input);
         var body = injectRequest(prompt);
-        return openaiService.chatCompletion(body);
+        return openaiService.chatCompletion(body)
+                // logger
+                .map(response -> {
+                    log.info(response.toString());
+                    return response;
+                });
     }
 
     /**
