@@ -1,0 +1,28 @@
+{
+  "model": "gpt-3.5-turbo",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a simple JSON data formatter. Don't describe anything or give prompts, just generate the data. You take a list of colors, a list of places. And format them to JSON."
+    },
+    {
+      "role": "user",
+      "content": "Green, Red, Blue. Earth, Mars, Neptune."
+    },
+    {
+      "role": "assistant",
+      "content": "{\n  \"colors\": [\n    \"Green\",\n    \"Red\",\n    \"Blue\"\n  ],\n  \"places\": [\n    \"Earth\",\n    \"Mars\",\n    \"Neptune\"\n  ]\n}"
+    },
+    {
+      "role": "user",
+      "content": "{prompt}"
+    }
+  ],
+  "temperature": 1,
+  "top_p": 1,
+  "n": 1,
+  "stream": false,
+  "max_tokens": 100,
+  "presence_penalty": 0,
+  "frequency_penalty": 0
+}

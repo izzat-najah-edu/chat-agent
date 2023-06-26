@@ -1,14 +1,12 @@
 package com.izzatalsharif.openai.chatagent;
 
+import com.izzatalsharif.openai.chatagent.config.RequestsConfig;
 import com.izzatalsharif.openai.chatagent.exception.OpenaiException;
-import com.izzatalsharif.openai.chatagent.util.FileUtility;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-
-import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -19,14 +17,21 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
  * and that it handles different types of responses correctly.
  */
 @SpringBootTest
-@ContextConfiguration(classes = {OpenaiConfig.class, OpenaiService.class, FileUtility.class})
+@ContextConfiguration(classes = {
+        OpenaiConfig.class,
+        OpenaiService.class,
+        RequestsConfig.class,
+})
 class OpenaiServiceIT {
 
     @Autowired
     private OpenaiService openaiService;
 
     @Autowired
-    private FileUtility fileUtility;
+    private String validRequest;
+
+    @Autowired
+    private String badRequest;
 
     /**
      * This test validates that the OpenaiService can successfully send a request to the OpenAI API and receive a response.
@@ -34,10 +39,10 @@ class OpenaiServiceIT {
      * and asserts that the response is not null.
      */
     @Test
-    void chatCompletion_success() throws IOException {
-        String requestBody = fileUtility.readFile("example/request.json");
-        Response response = openaiService.chatCompletion(requestBody).block();
+    void chatCompletion_success() {
+        Response response = openaiService.chatCompletion(validRequest).block();
         assertThat(response).isNotNull();
+        assertThat(response.getContent()).isNotNull();
     }
 
     /**
@@ -48,10 +53,7 @@ class OpenaiServiceIT {
     @Test
     void chatCompletion_4xxError() {
         assertThatExceptionOfType(OpenaiException.class)
-                .isThrownBy(() -> {
-                    String badRequest = "{...}";
-                    openaiService.chatCompletion(badRequest).block();
-                });
+                .isThrownBy(() -> openaiService.chatCompletion(badRequest).block());
     }
 
     /**
