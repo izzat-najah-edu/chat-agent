@@ -71,14 +71,14 @@ complete blog article with just a few keywords. And this is an example.
   use `AgentServiceFactory` to create instances of `AgentService` with the appropriate formatter and parser, and use
   this service to interact with the OpenAI API.
 
-- Note that you must have an environmental variable `OPENAI_API_KEY` with your Openai JWT.
+- Note that you must place your `openai.api.key` in application.properties under the same name.
+  It's recommended to use `openai.api.key=${ENV_VARIABLE}` to protect your key from version control.
 
-- Also note that to use `AgentServiceFactory` bean in your spring application you should add @ComponentScan
-  to your main application as follows:
+- Also note that you should import the dependency configuration as follows:
 
     ```
   @SpringBootApplication
-  @ComponentScan(basePackages = {"com.izzatalsharif.openai.chatagent"})
+  @Import(ChatAgentConfig.class)
   public class Application {
       public static void main(String[] args) {
           SpringApplication.run(Application.class, args);
