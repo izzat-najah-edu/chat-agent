@@ -85,3 +85,6 @@ complete blog article with just a few keywords. And this is an example.
       }
   }
   ```
+
+- If you want to understand how this API works. Check out the Integration Tests, they provide a general idea of how
+  everything works.
