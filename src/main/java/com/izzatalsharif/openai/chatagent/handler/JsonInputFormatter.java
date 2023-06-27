@@ -18,7 +18,7 @@ public class JsonInputFormatter<T>
             var json = objectMapper.writeValueAsString(input);
             return quoteFix(json);
         } catch (JsonProcessingException e) {
-            throw new InputFormattingException("openai request couldn't be formatted to json");
+            throw new InputFormattingException("openai request couldn't be formatted to json", e);
         }
     }
 

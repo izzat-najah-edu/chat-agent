@@ -1,8 +1,11 @@
 package com.izzatalsharif.openai.chatagent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.izzatalsharif.openai.chatagent.handler.JsonInputFormatter;
 import com.izzatalsharif.openai.chatagent.handler.JsonOutputParser;
+import com.izzatalsharif.openai.chatagent.handler.XmlInputFormatter;
+import com.izzatalsharif.openai.chatagent.handler.XmlOutputParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -28,24 +31,30 @@ import org.springframework.stereotype.Component;
 @Component
 public class AgentServiceFactory {
 
-    private final ObjectMapper objectMapper;
-
     private final OpenaiService openaiService;
 
-    private <I, O> AgentService<I, O> agentService(String template, InputFormatter<I> formatter, OutputParser<O> parser) {
-        return new AgentService<>(template, formatter, parser, openaiService);
-    }
+    private final ObjectMapper objectMapper;
 
-    private <I> JsonInputFormatter<I> jsonFormatter() {
+    private final XmlMapper xmlMapper;
+
+    public <I> JsonInputFormatter<I> jsonFormatter() {
         return new JsonInputFormatter<>(objectMapper);
     }
 
-    private <O> JsonOutputParser<O> jsonParser(Class<O> clazz) {
+    public <I> XmlInputFormatter<I> xmlFormatter() {
+        return new XmlInputFormatter<>(xmlMapper);
+    }
+
+    public <O> JsonOutputParser<O> jsonParser(Class<O> clazz) {
         return new JsonOutputParser<>(objectMapper, clazz);
     }
 
+    public <O> XmlOutputParser<O> xmlParser(Class<O> clazz) {
+        return new XmlOutputParser<>(xmlMapper, clazz);
+    }
+
     /**
-     * Creates a new AgentService with the specified template and data handler.
+     * Creates a new AgentService with the specified template and data handlers.
      *
      * @param template  the template to be used by the AgentService.
      *                  It must be a valid JSON string.
@@ -54,9 +63,21 @@ public class AgentServiceFactory {
      * @return a new AgentService instance
      * @throws IllegalArgumentException if the template does not contain a prompt placeholder
      */
-    public <I, O> AgentService<I, O> createAgentService(String template, InputFormatter<I> formatter, OutputParser<O> parser)
-            throws IllegalArgumentException {
-        return agentService(template, formatter, parser);
+    public <I, O> AgentService<I, O> createAgentService(String template, InputFormatter<I> formatter, OutputParser<O> parser) {
+        return new AgentService<>(template, formatter, parser, openaiService);
+    }
+
+    /**
+     * Creates a new AgentService with the specified template and simple string-based InputFormatter and OutputParser.
+     * It does not perform any special formatting or parsing.
+     *
+     * @param template the template to be used by the AgentService.
+     *                 It must be a valid JSON string.
+     * @return a new AgentService instance
+     * @throws IllegalArgumentException if the template does not contain a prompt placeholder
+     */
+    public AgentService<String, String> createSimpleAgentService(String template) {
+        return createAgentService(template, input -> input, output -> output);
     }
 
     /**
@@ -69,7 +90,20 @@ public class AgentServiceFactory {
      * @throws IllegalArgumentException if the template does not contain a prompt placeholder
      */
     public <I, O> AgentService<I, O> createJsonFormatterAgentService(String template, OutputParser<O> parser) {
-        return agentService(template, jsonFormatter(), parser);
+        return createAgentService(template, jsonFormatter(), parser);
+    }
+
+    /**
+     * Creates a new AgentService with the specified template and an XML InputFormatter.
+     *
+     * @param template the template to be used by the AgentService.
+     *                 It must be a valid JSON string.
+     * @param parser   the OutputParser to be used by the AgentService
+     * @return a new AgentService instance
+     * @throws IllegalArgumentException if the template does not contain a prompt placeholder
+     */
+    public <I, O> AgentService<I, O> createXmlFormatterAgentService(String template, OutputParser<O> parser) {
+        return createAgentService(template, xmlFormatter(), parser);
     }
 
     /**
@@ -83,7 +117,21 @@ public class AgentServiceFactory {
      * @throws IllegalArgumentException if the template does not contain a prompt placeholder
      */
     public <I, O> AgentService<I, O> createJsonParserAgentService(String template, InputFormatter<I> formatter, Class<O> outputClass) {
-        return agentService(template, formatter, jsonParser(outputClass));
+        return createAgentService(template, formatter, jsonParser(outputClass));
+    }
+
+    /**
+     * Creates a new AgentService with the specified template and an XML OutputParser.
+     *
+     * @param template    the template to be used by the AgentService.
+     *                    It must be a valid JSON string.
+     * @param formatter   the InputFormatter to be used by the AgentService
+     * @param outputClass the class of the output object
+     * @return a new AgentService instance
+     * @throws IllegalArgumentException if the template does not contain a prompt placeholder
+     */
+    public <I, O> AgentService<I, O> createXmlParserAgentService(String template, InputFormatter<I> formatter, Class<O> outputClass) {
+        return createAgentService(template, formatter, xmlParser(outputClass));
     }
 
     /**
@@ -96,20 +144,20 @@ public class AgentServiceFactory {
      * @throws IllegalArgumentException if the template does not contain a prompt placeholder
      */
     public <I, O> AgentService<I, O> createJsonAgentService(String template, Class<O> outputClass) {
-        return agentService(template, jsonFormatter(), jsonParser(outputClass));
+        return createAgentService(template, jsonFormatter(), jsonParser(outputClass));
     }
 
     /**
-     * Creates a new AgentService with the specified template and simple string-based InputFormatter and OutputParser.
-     * It does not perform any special formatting or parsing.
+     * Creates a new AgentService with the specified template and both an XML InputFormatter and OutputParser.
      *
-     * @param template the template to be used by the AgentService.
-     *                 It must be a valid JSON string.
+     * @param template    the template to be used by the AgentService.
+     *                    It must be a valid JSON string.
+     * @param outputClass the class of the output object
      * @return a new AgentService instance
      * @throws IllegalArgumentException if the template does not contain a prompt placeholder
      */
-    public AgentService<String, String> createSimpleAgentService(String template) {
-        return agentService(template, input -> input, output -> output);
+    public <I, O> AgentService<I, O> createXmlAgentService(String template, Class<O> outputClass) {
+        return createAgentService(template, xmlFormatter(), xmlParser(outputClass));
     }
 
 }
