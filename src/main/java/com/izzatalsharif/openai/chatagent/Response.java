@@ -2,6 +2,9 @@ package com.izzatalsharif.openai.chatagent;
 
 import java.util.List;
 
+/**
+ * OpenAI chat completion maps to this exact object.
+ */
 public record Response(
         String id,
         String object,

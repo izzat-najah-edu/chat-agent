@@ -1,19 +1,26 @@
 package com.izzatalsharif.openai.chatagent.config;
 
-import com.izzatalsharif.openai.chatagent.util.FileUtility;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ResourceLoader;
 
 import java.io.IOException;
+import java.nio.file.Files;
 
+@RequiredArgsConstructor
 @Configuration
-@Import(FileUtility.class)
 public class RequestsConfig {
 
     @Autowired
-    private FileUtility fileUtility;
+    private final ResourceLoader resourceLoader;
+
+    private String readFile(String resourcePath) throws IOException {
+        var resource = resourceLoader.getResource("classpath:" + resourcePath);
+        var path = resource.getFile().toPath();
+        return Files.readString(path);
+    }
 
     /**
      * @return A simple invalid request that chat completion rejects.
@@ -28,7 +35,7 @@ public class RequestsConfig {
      */
     @Bean
     public String validRequest() throws IOException {
-        return fileUtility.readFile("agent/simpleRequest.json");
+        return readFile("agent/simpleRequest.json");
     }
 
     /**
@@ -38,7 +45,7 @@ public class RequestsConfig {
      */
     @Bean
     public String testAgentRequest() throws IOException {
-        return fileUtility.readFile("agent/testAgent.json");
+        return readFile("agent/testAgent.json");
     }
 
 }
