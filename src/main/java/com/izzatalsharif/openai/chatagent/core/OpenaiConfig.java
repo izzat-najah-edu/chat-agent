@@ -26,7 +26,7 @@ public class OpenaiConfig {
     }
 
     @Bean
-    public WebClient chatCompletionWebClient() {
+    WebClient chatCompletionWebClient() {
         return WebClient.builder()
                 .baseUrl(chatCompletionUrl)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)

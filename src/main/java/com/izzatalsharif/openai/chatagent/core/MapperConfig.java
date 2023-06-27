@@ -9,12 +9,12 @@ import org.springframework.context.annotation.Configuration;
 class MapperConfig {
 
     @Bean
-    public ObjectMapper objectMapper() {
+    ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
 
     @Bean
-    public XmlMapper xmlMapper() {
+    XmlMapper xmlMapper() {
         return new XmlMapper();
     }
 
