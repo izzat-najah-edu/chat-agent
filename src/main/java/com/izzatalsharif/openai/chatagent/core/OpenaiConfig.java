@@ -12,7 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class OpenaiConfig {
 
-    @Value("${openai.api.chat-completion-url}")
+    @Value("${openai.api.chat-completion-url:https://api.openai.com/v1/chat/completions}")
     private String chatCompletionUrl;
 
     @Value("${openai.api.key:}")

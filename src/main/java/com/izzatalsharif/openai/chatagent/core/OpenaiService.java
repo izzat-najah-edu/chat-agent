@@ -20,7 +20,7 @@ public class OpenaiService {
 
     private final WebClient chatCompletionWebClient;
 
-    @Value("${openai.api.request-timeout}")
+    @Value("${openai.api.request-timeout:5m}")
     private Duration timeout;
 
     public Mono<Response> chatCompletion(String requestBody) {
