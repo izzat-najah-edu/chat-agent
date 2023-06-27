@@ -15,8 +15,8 @@ outputs for the OpenAI API.
 - **AgentService**: This is the core service of the library. It formats input data, performs chat completion, and parses
   the output.
 
-- **Built-in Formatters and Parsers**: The library comes with built-in JSON formatters (for inputs) and parsers (for
-  outputs). More can be added in future updates.
+- **Built-in Formatters and Parsers**: The library comes with built-in JSON & XML formatters (for inputs)
+  and parsers (for outputs). More might be added in future updates.
 
 - **Custom Formatters and Parsers**: A key functionality is that you can implement any custom formatter or parser and
   use it with an AgentService.
@@ -83,8 +83,8 @@ complete blog article with just a few keywords. And this is an example.
   use `AgentServiceFactory` to create instances of `AgentService` with the appropriate formatter and parser, and use
   this service to interact with the OpenAI API.
 
-- If you want to understand how this API works. Check out the Integration Tests, they provide a general idea of how
-  everything works.
+- If you want to understand how this API works. Check out the Integration Tests, especially `AgentServiceIT`.
+  They provide a general idea of how everything works.
 
 ## Application Properties
 
