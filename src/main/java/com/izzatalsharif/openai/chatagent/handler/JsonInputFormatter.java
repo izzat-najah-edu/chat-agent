@@ -15,22 +15,10 @@ public class JsonInputFormatter<T>
     @Override
     public String formatInput(T input) throws InputFormattingException {
         try {
-            var json = objectMapper.writeValueAsString(input);
-            return quoteFix(json);
+            return objectMapper.writeValueAsString(input);
         } catch (JsonProcessingException e) {
             throw new InputFormattingException("openai request couldn't be formatted to json", e);
         }
-    }
-
-    /**
-     * Replaces all double quotes with single quotes.
-     * This ensures all JSON parsers can parse it correctly.
-     *
-     * @param json the JSON string to be fixed
-     * @return the fixed JSON string
-     */
-    private String quoteFix(String json) {
-        return json.replaceAll("\"", "'");
     }
 
 }
