@@ -142,7 +142,20 @@ public class AgentService<I, O> {
      * @return the request template with the prompt injected
      */
     private String injectRequest(String prompt) {
+        prompt = quoteFix(prompt);
         return template.replace("{prompt}", prompt);
+    }
+
+    /**
+     * Adds prefix '\' to all double quotes to ensure proper parsing.
+     * This is because the prompt will be injected as a string and parsed again in OpenAI server.
+     * So it must be explicit '\"' in the JSON body.
+     *
+     * @param prompt the input string to be fixed
+     * @return the fixed input string
+     */
+    private String quoteFix(String prompt) {
+        return prompt.replaceAll("\"", "\\\\\"");
     }
 
 }

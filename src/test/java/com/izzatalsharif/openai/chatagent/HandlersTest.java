@@ -1,13 +1,7 @@
 package com.izzatalsharif.openai.chatagent;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.izzatalsharif.openai.chatagent.core.HandlerFactory;
 import com.izzatalsharif.openai.chatagent.exception.OutputParsingException;
-import com.izzatalsharif.openai.chatagent.handler.JsonInputFormatter;
-import com.izzatalsharif.openai.chatagent.handler.JsonOutputParser;
-import com.izzatalsharif.openai.chatagent.handler.XmlInputFormatter;
-import com.izzatalsharif.openai.chatagent.handler.XmlOutputParser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
