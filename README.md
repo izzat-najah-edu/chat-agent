@@ -67,14 +67,7 @@ complete blog article with just a few keywords. And this is an example.
 
 ## Getting Started
 
-- To use the Chat Agent library, you need to add it as a dependency in your Spring Boot project. Once added, you can
-  use `AgentServiceFactory` to create instances of `AgentService` with the appropriate formatter and parser, and use
-  this service to interact with the OpenAI API.
-
-- Note that you must place your `openai.api.key` in application.properties under the same name.
-  It's recommended to use `openai.api.key=${ENV_VARIABLE}` to protect your key from version control.
-
-- Also note that you should import the dependency configuration as follows:
+- Import the dependency configuration as follows:
 
     ```
   @SpringBootApplication
@@ -86,5 +79,19 @@ complete blog article with just a few keywords. And this is an example.
   }
   ```
 
+- To use the Chat Agent library, you need to add it as a dependency in your Spring Boot project. Once added, you can
+  use `AgentServiceFactory` to create instances of `AgentService` with the appropriate formatter and parser, and use
+  this service to interact with the OpenAI API.
+
 - If you want to understand how this API works. Check out the Integration Tests, they provide a general idea of how
   everything works.
+
+## Application Properties
+
+- **`openai.api.key`** your OpenAI API Key. Must override it in your application.
+  It's recommended to use `openai.api.key=${ENV_VARIABLE}` to protect your key from version control.
+
+- **`openai.api.request-timeout`.** Chat completions typically take a long time to respond. So timeout is set to 5
+  minutes by default. Override it if needed.
+
+- **`openai.api.chat-completion-url`** set to [https://api.openai.com/v1/chat/completions].
