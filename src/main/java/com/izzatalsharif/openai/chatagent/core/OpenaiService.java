@@ -1,8 +1,10 @@
-package com.izzatalsharif.openai.chatagent;
+package com.izzatalsharif.openai.chatagent.core;
 
+import com.izzatalsharif.openai.chatagent.Response;
 import com.izzatalsharif.openai.chatagent.exception.OpenaiException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -12,18 +14,18 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 
 @Log
+@RequiredArgsConstructor
 @Service
-class OpenaiService {
+public class OpenaiService {
 
-    private final WebClient webClient;
+    private final WebClient chatCompletionWebClient;
 
-    public OpenaiService(@Qualifier("chatCompletionWebClient") WebClient webClient) {
-        this.webClient = webClient;
-    }
+    @Value("${openai.api.request-timeout}")
+    private Duration timeout;
 
     public Mono<Response> chatCompletion(String requestBody) {
         log.info(requestBody);
-        return webClient.post()
+        return chatCompletionWebClient.post()
                 .body(BodyInserters.fromValue(requestBody))
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, response ->
@@ -35,7 +37,7 @@ class OpenaiService {
                                 .flatMap(errorBody -> Mono.error(new OpenaiException(
                                         "5xx error: " + response.statusCode() + " " + errorBody))))
                 .bodyToMono(Response.class)
-                .timeout(Duration.ofMinutes(5), Mono.error(new OpenaiException("Request to OpenAI API timed out.")));
+                .timeout(timeout, Mono.error(new OpenaiException("Request to OpenAI API timed out.")));
     }
 
 }

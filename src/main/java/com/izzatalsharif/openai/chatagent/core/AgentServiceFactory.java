@@ -1,7 +1,9 @@
-package com.izzatalsharif.openai.chatagent;
+package com.izzatalsharif.openai.chatagent.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.izzatalsharif.openai.chatagent.InputFormatter;
+import com.izzatalsharif.openai.chatagent.OutputParser;
 import com.izzatalsharif.openai.chatagent.handler.JsonInputFormatter;
 import com.izzatalsharif.openai.chatagent.handler.JsonOutputParser;
 import com.izzatalsharif.openai.chatagent.handler.XmlInputFormatter;

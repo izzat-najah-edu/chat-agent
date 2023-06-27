@@ -1,7 +1,9 @@
 package com.izzatalsharif.openai.chatagent;
 
+import com.izzatalsharif.openai.chatagent.core.OpenaiConfig;
 import com.izzatalsharif.openai.chatagent.config.RequestsConfig;
 import com.izzatalsharif.openai.chatagent.exception.OpenaiException;
+import com.izzatalsharif.openai.chatagent.core.OpenaiService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

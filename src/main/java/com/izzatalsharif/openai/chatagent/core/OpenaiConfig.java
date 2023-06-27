@@ -1,8 +1,7 @@
-package com.izzatalsharif.openai.chatagent;
+package com.izzatalsharif.openai.chatagent.core;
 
 import com.izzatalsharif.openai.chatagent.exception.OpenaiException;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
-class OpenaiConfig {
+public class OpenaiConfig {
 
     @Value("${openai.api.chat-completion-url}")
     private String chatCompletionUrl;
@@ -27,7 +26,6 @@ class OpenaiConfig {
     }
 
     @Bean
-    @Qualifier("chatCompletion")
     public WebClient chatCompletionWebClient() {
         return WebClient.builder()
                 .baseUrl(chatCompletionUrl)

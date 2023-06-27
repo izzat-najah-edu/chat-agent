@@ -1,4 +1,4 @@
-package com.izzatalsharif.openai.chatagent;
+package com.izzatalsharif.openai.chatagent.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class MapperConfig {
+class MapperConfig {
 
     @Bean
     public ObjectMapper objectMapper() {

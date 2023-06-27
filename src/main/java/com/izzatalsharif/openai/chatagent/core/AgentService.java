@@ -1,5 +1,8 @@
-package com.izzatalsharif.openai.chatagent;
+package com.izzatalsharif.openai.chatagent.core;
 
+import com.izzatalsharif.openai.chatagent.InputFormatter;
+import com.izzatalsharif.openai.chatagent.OutputParser;
+import com.izzatalsharif.openai.chatagent.Response;
 import com.izzatalsharif.openai.chatagent.exception.InputFormattingException;
 import com.izzatalsharif.openai.chatagent.exception.OutputParsingException;
 import lombok.extern.java.Log;

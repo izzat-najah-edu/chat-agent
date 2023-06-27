@@ -1,7 +1,7 @@
 package com.izzatalsharif.openai.chatagent.config;
 
-import com.izzatalsharif.openai.chatagent.AgentService;
-import com.izzatalsharif.openai.chatagent.AgentServiceFactory;
+import com.izzatalsharif.openai.chatagent.core.AgentService;
+import com.izzatalsharif.openai.chatagent.core.AgentServiceFactory;
 import com.izzatalsharif.openai.chatagent.ChatAgentConfig;
 import com.izzatalsharif.openai.chatagent.dto.ColorsAndPlaces;
 import org.springframework.beans.factory.annotation.Autowired;

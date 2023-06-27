@@ -3,6 +3,7 @@ package com.izzatalsharif.openai.chatagent;
 import com.izzatalsharif.openai.chatagent.config.TestAgentConfig;
 import com.izzatalsharif.openai.chatagent.dto.ColorsAndPlaces;
 import com.izzatalsharif.openai.chatagent.exception.OutputParsingException;
+import com.izzatalsharif.openai.chatagent.core.AgentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
