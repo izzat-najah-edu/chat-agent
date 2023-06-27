@@ -2,19 +2,33 @@ package com.izzatalsharif.openai.chatagent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.izzatalsharif.openai.chatagent.core.HandlerFactory;
 import com.izzatalsharif.openai.chatagent.exception.OutputParsingException;
 import com.izzatalsharif.openai.chatagent.handler.JsonInputFormatter;
 import com.izzatalsharif.openai.chatagent.handler.JsonOutputParser;
 import com.izzatalsharif.openai.chatagent.handler.XmlInputFormatter;
 import com.izzatalsharif.openai.chatagent.handler.XmlOutputParser;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+@SpringBootTest
+@ContextConfiguration(classes = HandlerFactory.class)
 public class HandlersTest {
+
+    @Autowired
+    private HandlerFactory handlerFactory;
+
+    private final SomeObject someObject = new SomeObject(
+            List.of("a", "b", "c"),
+            List.of("A", "B", "C")
+    );
 
     record SomeObject(
             List<String> a,
@@ -27,11 +41,6 @@ public class HandlersTest {
             Integer d
     ) {
     }
-
-    private final SomeObject someObject = new SomeObject(
-            List.of("a", "b", "c"),
-            List.of("A", "B", "C")
-    );
 
     void assertFormatAndParse(InputFormatter<SomeObject> formatter, OutputParser<SomeObject> parser) {
         var input = someObject;
@@ -51,32 +60,32 @@ public class HandlersTest {
     @Test
     void formatThenParseJson_success() {
         assertFormatAndParse(
-                new JsonInputFormatter<>(new ObjectMapper()),
-                new JsonOutputParser<>(new ObjectMapper(), SomeObject.class)
+                handlerFactory.jsonFormatter(),
+                handlerFactory.jsonParser(SomeObject.class)
         );
     }
 
     @Test
     void formatThenParseXml_success() {
         assertFormatAndParse(
-                new XmlInputFormatter<>(new XmlMapper()),
-                new XmlOutputParser<>(new XmlMapper(), SomeObject.class)
+                handlerFactory.xmlFormatter(),
+                handlerFactory.xmlParser(SomeObject.class)
         );
     }
 
     @Test
     void formatThenParseJson_parseError() {
         assertParseError(
-                new JsonInputFormatter<>(new ObjectMapper()),
-                new JsonOutputParser<>(new ObjectMapper(), DifferentObject.class)
+                handlerFactory.jsonFormatter(),
+                handlerFactory.jsonParser(DifferentObject.class)
         );
     }
 
     @Test
     void formatThenParseXml_parseError() {
         assertParseError(
-                new XmlInputFormatter<>(new XmlMapper()),
-                new XmlOutputParser<>(new XmlMapper(), DifferentObject.class)
+                handlerFactory.xmlFormatter(),
+                handlerFactory.xmlParser(DifferentObject.class)
         );
     }
 

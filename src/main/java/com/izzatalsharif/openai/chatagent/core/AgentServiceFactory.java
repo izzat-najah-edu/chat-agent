@@ -1,13 +1,7 @@
 package com.izzatalsharif.openai.chatagent.core;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.izzatalsharif.openai.chatagent.InputFormatter;
 import com.izzatalsharif.openai.chatagent.OutputParser;
-import com.izzatalsharif.openai.chatagent.handler.JsonInputFormatter;
-import com.izzatalsharif.openai.chatagent.handler.JsonOutputParser;
-import com.izzatalsharif.openai.chatagent.handler.XmlInputFormatter;
-import com.izzatalsharif.openai.chatagent.handler.XmlOutputParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -35,25 +29,7 @@ public class AgentServiceFactory {
 
     private final OpenaiService openaiService;
 
-    private final ObjectMapper objectMapper;
-
-    private final XmlMapper xmlMapper;
-
-    public <I> JsonInputFormatter<I> jsonFormatter() {
-        return new JsonInputFormatter<>(objectMapper);
-    }
-
-    public <I> XmlInputFormatter<I> xmlFormatter() {
-        return new XmlInputFormatter<>(xmlMapper);
-    }
-
-    public <O> JsonOutputParser<O> jsonParser(Class<O> clazz) {
-        return new JsonOutputParser<>(objectMapper, clazz);
-    }
-
-    public <O> XmlOutputParser<O> xmlParser(Class<O> clazz) {
-        return new XmlOutputParser<>(xmlMapper, clazz);
-    }
+    private final HandlerFactory handlerFactory;
 
     /**
      * Creates a new AgentService with the specified template and data handlers.
@@ -92,7 +68,7 @@ public class AgentServiceFactory {
      * @throws IllegalArgumentException if the template does not contain a prompt placeholder
      */
     public <I, O> AgentService<I, O> createJsonFormatterAgentService(String template, OutputParser<O> parser) {
-        return createAgentService(template, jsonFormatter(), parser);
+        return createAgentService(template, handlerFactory.jsonFormatter(), parser);
     }
 
     /**
@@ -105,7 +81,7 @@ public class AgentServiceFactory {
      * @throws IllegalArgumentException if the template does not contain a prompt placeholder
      */
     public <I, O> AgentService<I, O> createXmlFormatterAgentService(String template, OutputParser<O> parser) {
-        return createAgentService(template, xmlFormatter(), parser);
+        return createAgentService(template, handlerFactory.xmlFormatter(), parser);
     }
 
     /**
@@ -119,7 +95,7 @@ public class AgentServiceFactory {
      * @throws IllegalArgumentException if the template does not contain a prompt placeholder
      */
     public <I, O> AgentService<I, O> createJsonParserAgentService(String template, InputFormatter<I> formatter, Class<O> outputClass) {
-        return createAgentService(template, formatter, jsonParser(outputClass));
+        return createAgentService(template, formatter, handlerFactory.jsonParser(outputClass));
     }
 
     /**
@@ -133,7 +109,7 @@ public class AgentServiceFactory {
      * @throws IllegalArgumentException if the template does not contain a prompt placeholder
      */
     public <I, O> AgentService<I, O> createXmlParserAgentService(String template, InputFormatter<I> formatter, Class<O> outputClass) {
-        return createAgentService(template, formatter, xmlParser(outputClass));
+        return createAgentService(template, formatter, handlerFactory.xmlParser(outputClass));
     }
 
     /**
@@ -146,7 +122,7 @@ public class AgentServiceFactory {
      * @throws IllegalArgumentException if the template does not contain a prompt placeholder
      */
     public <I, O> AgentService<I, O> createJsonAgentService(String template, Class<O> outputClass) {
-        return createAgentService(template, jsonFormatter(), jsonParser(outputClass));
+        return createAgentService(template, handlerFactory.jsonFormatter(), handlerFactory.jsonParser(outputClass));
     }
 
     /**
@@ -159,7 +135,7 @@ public class AgentServiceFactory {
      * @throws IllegalArgumentException if the template does not contain a prompt placeholder
      */
     public <I, O> AgentService<I, O> createXmlAgentService(String template, Class<O> outputClass) {
-        return createAgentService(template, xmlFormatter(), xmlParser(outputClass));
+        return createAgentService(template, handlerFactory.xmlFormatter(), handlerFactory.xmlParser(outputClass));
     }
 
 }

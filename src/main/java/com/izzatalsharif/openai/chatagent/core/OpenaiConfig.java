@@ -21,7 +21,7 @@ public class OpenaiConfig {
     @PostConstruct
     public void checkProperties() {
         if (openaiApiKey.isEmpty()) {
-            throw new OpenaiException("The 'openai.api-key' property must be defined");
+            throw new OpenaiException("The 'openai.api.key' property must be defined");
         }
     }
 
