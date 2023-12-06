@@ -1,10 +1,46 @@
 # Chat Agent
 
-Chat Agent is a Spring Boot library designed to abstract the interaction with the OpenAI Chat Completion API. It is
-particularly useful when working with various data formats and provides a streamlined way to format inputs and parse
-outputs for the OpenAI API.
+Chat Agent is a Spring Boot library designed to abstract the interaction with the OpenAI Chat Completion API.
 
-## Key Features
+## 🔍 Problem
+
+- Interacting with the OpenAI Chat Completion API often presents overhead due to specific data formatting and parsing
+  requirements. Users might need to specify prompts in various standard formats like Markdown, XML, or JSON. Whether its
+  input (request to the API) or an output (response message).
+
+- This diversity in data formats often means multiple APIs are needed, requiring many dependencies in your project —one
+  to connect with OpenAI, another to format input data, and yet another to parse the output data— which is inefficient.
+
+- A much better approach is to combine all these data processes in one library.
+
+## 💡 Solution
+
+Chat Agent is a carefully designed & tested Spring Boot library. Offering several features:
+
+- **Data Formatting**: It can handle many standard data formats such as JSON or XML optimally, Resulting in a simplified
+  interaction with ChatGPT API.
+
+- **Built-in Reactive (Async) Requests**: Chat Agent embodies reactivity in its operations. Recognizing that chat
+  completion requests are often time-consuming. Reactive components are essential with GPT API. Hence, enhancing the
+  performance and user experience through non-blocking, asynchronous processes.
+
+- **Customizable Formatters and Parsers**: Chat Agent is designed to be flexible. It allows for the implementation of
+  custom formatters and parsers, so you can use it for the standard data formats & customize it with your special data
+  format while still keeping the number of library dependencies at minimum.
+
+### Before:
+
+- The Manual Approach - 3 APIs used.
+
+![Diagram1](https://github.com/izzat5233/chat-agent/assets/92182269/0c4e3370-4081-4e2d-8a4a-bf207875abcf)
+
+### After:
+
+- Using Chat Agent API to handle all processes.
+
+![Diagram2](https://github.com/izzat5233/chat-agent/assets/92182269/750b0b54-16de-4a00-a56f-d0b1d0eab8e3)
+
+## 🛠️ In Details
 
 - **Data Formatting**: Inputs to the OpenAI API often need to be formatted from various formats (like plain strings,
   Markdown, etc.) to formats like JSON or XML. Chat Agent provides functionality to handle this formatting.
@@ -24,7 +60,7 @@ outputs for the OpenAI API.
 - **Reactive Requests**: All requests are reactive. This is essential since chat completion requests can take a long
   time to process, and the reactive approach allows for better handling of these long-running requests.
 
-## Example
+## 📚 Example
 
 Let's say you want to generate a blog article. You have a few keywords in mind, and you want a complete Markdown blog
 article. You can achieve this by dividing the generation process into tasks:
@@ -65,7 +101,7 @@ article. You can achieve this by dividing the generation process into tasks:
 By dividing the process into these tasks and using the Chat Agent library to handle each task, you can generate a
 complete blog article with just a few keywords. And this is an example.
 
-## Getting Started
+## 🚀 Getting Started
 
 - Import the dependency configuration as follows:
 
@@ -86,7 +122,7 @@ complete blog article with just a few keywords. And this is an example.
 - If you want to understand how this API works. Check out the Integration Tests, especially `AgentServiceIT`.
   They provide a general idea of how everything works.
 
-## Application Properties
+### Application Properties
 
 - **`openai.api.key`** your OpenAI API Key. Must override it in your application.
   It's recommended to use `openai.api.key=${ENV_VARIABLE}` to protect your key from version control.
@@ -94,4 +130,4 @@ complete blog article with just a few keywords. And this is an example.
 - **`openai.api.request-timeout`.** Chat completions typically take a long time to respond. So timeout is set to 5
   minutes by default. Override it if needed.
 
-- **`openai.api.chat-completion-url`** set to [https://api.openai.com/v1/chat/completions].
+- **`openai.api.chat-completion-url`** set to `https://api.openai.com/v1/chat/completions`.
